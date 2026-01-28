@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rabbit Kombat</title>
+  <script src="https://telegram.org/js/telegram-web-app.js?59"></script>
+  <link rel="stylesheet" href="style.css" class="css">
+  <style>
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  background: #0b0614;
+}
+#app {
+  
+  position: relative;
+}
+.el {
+  position: absolute;
+  color: #ffec07;
+  font-weight: 900;
+  font-size: 30px;
+}
+img {
+  height: 250px;
+  border-radius: 50%;
+  width: 250px;
+  transition: transform 0.15s ease;
+}
+img:active {
+  transform: scale(0.98);
+}
+@keyframes floatUp{
+  from{
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to{
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+}
+#loading {
+  background-image: url('images/background.webp');
+  height: 100vh;
+  width: 100vw;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  text-shadow: 3px 5px 10px rgb(255,180,9);
+  font-size: 50px;
+  font-weight: 800;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+#loading p {
+  transform: translateY(20rem);
+  font-family: Sans-Serif;
+}
+#loading .bar {
+  width: 90%;
+  height: 10px;
+  background: #ffffff50;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 21rem;
+}
+#loading .bar span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #ffec07, #ffb409);
+  animation: load 3s ease infinite;
+  border-radius: 10px;
+}
+#loading h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 50px;
+  transform: translateY(-150px);
+  text-shadow: none;
+}
+@keyframes load {
+  from{
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+.tabs-container {
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+  background: rgb(46,51,81);
+  left: 0;
+  right: 0;
+  border-top: 2px solid rgb(42,93,182);
+  padding: 10px 0 10px 0;
+}
+
+.tab {
+  background: none;
+  border: none;
+  opacity: 0.4;
+  flex: 1;
+}
+
+.tab img {
+  height: 40px;
+  width: auto;
+  border-radius: 0;
+}
+
+.tab.active {
+  opacity: 1;
+  transform: scale(1.1);
+  display: block;
+}
+.content {
+  display: none;
+}
+.content.active {
+  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.tab-content{
+  color: white;
+}
+  </style>
+</head>
+<body>
+  <div id="loading"><h1>Rabbit Kombat</h1><p>loading...</p><div class="bar"><span></span></div></div>
+  <div id="app" style="display:none">
+  <div class="tabs-container">
+  <button class="tab active" data-tab="home">
+    <img src="images/home.png">
+  </button>
+  <button class="tab" data-tab="friends">
+    <img src="images/friends.png">
+  </button>
+  <button class="tab" data-tab="leaderboard">
+    <img src="images/leaderboard.png">
+  </button>
+  <button class="tab" data-tab="earn">
+    <img src="images/earn.png">
+  </button>
+</div>
+
+<div class="tab-content">
+  <section id="home" class="content active">
+  <h1 id="points">0</h1>
+  <img src="/
+  images/logo.webp" alt="logo" id="logo">
+  </section>
+  <section id="friends" class="content">
+    <h1>This is Friends</h1>
+  </section>
+  <section id="leaderboard" class="content">
+  <h1 style="margin-bottom: 20px;">Top Rabbits</h1>
+  <div id="leaderboard-list" style="width: 90%; max-height: 60vh; overflow-y: auto;">
+    <p style="text-align: center;">Loading rankings...</p>
+  </div>
+</section>
+  <section id="earn" class="content">
+    <h1>This is content</h1>
+  </section>
+</div>
+</div>
+<script type="module">
+import { query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+import { doc, setDoc, updateDoc, increment, onSnapshot} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+const firebaseConfig = {
+apiKey: "AIzaSyDxLT9y-1YFG6LLRBcePEmMcTFvq2NiZ4A",
+authDomain: "rabbit-kombat-56122.firebaseapp.com",
+projectId: "rabbit-kombat-56122",
+storageBucket: "rabbit-kombat-56122.firebasestorage.app",
+messagingSenderId: "744320568726",
+appId: "1:744320568726:web:acfb93b1e16e68b56921b7"
+};
+let score = null;
+const loading = document.getElementById("loading");
+const appUI = document.getElementById("app");
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+const userId = tgUser?.id;
+const refDoc = doc(db, "users", userId || "1234567890");
+const logo = document.getElementById("logo");
+logo.addEventListener("click", async (e) => {
+updateDoc(refDoc, {
+coins: increment(10)
+});
+const el = document.createElement("p");
+el.classList.add("el");
+el.innerText = "+10";
+el.style.animation = "floatUp 2s ease forwards";
+el.style.top = e.clientY + "px";
+el.style.left = e.clientX + "px";
+document.body.appendChild(el);
+setTimeout(() => {
+el.remove();
+},2000);
+})
+await setDoc(refDoc, {
+  userName: tgUser?.username || "Developer",
+  name: tgUser?.first_name + tgUser?.last_name || "Dev",
+  isPremium: tgUser?.is_premium || false,
+}, { merge: true });
+const points = document.getElementById("points");
+let isAppReady = false;
+onSnapshot(refDoc, (snap) => {
+if(!snap.exists()) return;
+  const data = snap.data();
+score = data.coins || 0;
+points.innerText = score;
+if(!isAppReady) {
+    loading.style.display = "none";
+    appUI.style.display = "block";
+    isAppReady = true;
+  }
+});
+const tabs = document.querySelectorAll(".tab");
+const contents = document.querySelectorAll(".content");
+
+tabs.forEach(tab => {
+  tab.addEventListener("click", () => {
+    // remove active from all tabs
+    tabs.forEach(t => t.classList.remove("active"));
+    contents.forEach(c => c.classList.remove("active"));
+
+    // add active to clicked tab
+    tab.classList.add("active");
+    const target = tab.dataset.tab;
+    document.getElementById(target).classList.add("active");
+  });
+});
+async function updateLeaderboard() {
+  const leaderboardList = document.getElementById("leaderboard-list");
+  
+  // Query: Users ko coins ke basis pe sort karo (Top 10)
+  const q = query(collection(db, "users"), orderBy("coins", "desc"), limit(10));
+  
+  try {
+    const querySnapshot = await getDocs(q);
+    leaderboardList.innerHTML = ""; // Purana content clear karein
+
+    let rank = 1;
+    querySnapshot.forEach((doc) => {
+      const user = doc.data();
+      const row = document.createElement("div");
+      
+      // Styling for each row
+      row.style = `
+        display: flex; 
+        justify-content: space-between; 
+        padding: 10px; 
+        background: rgba(255,255,255,0.1); 
+        margin-bottom: 5px; 
+        border-radius: 8px;
+        border-left: 4px solid ${rank <= 3 ? '#ffec07' : 'transparent'};
+      `;
+
+      row.innerHTML = `
+        <span>#${rank} ${user.userName || "Anonymous"}</span>
+        <span style="color: #ffec07; font-weight: bold;">${user.coins || 0} 🥕</span>
+      `;
+      
+      leaderboardList.appendChild(row);
+      rank++;
+    });
+  } catch (error) {
+    console.error("Leaderboard error: ", error);
+    leaderboardList.innerHTML = "Failed to load leaderboard.";
+  }
+}
+tabs.forEach(tab => {
+  tab.addEventListener("click", () => {
+    // ... aapka purana switching logic ...
+    const target = tab.dataset.tab;
+    
+    if(target === "leaderboard") {
+      updateLeaderboard();
+    }
+  });
+});
+
+</script>
+</body>
+</html>
