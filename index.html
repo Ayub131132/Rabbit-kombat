@@ -162,8 +162,7 @@ img:active {
 <div class="tab-content">
   <section id="home" class="content active">
   <h1 id="points">0</h1>
-  <img src="/
-  images/logo.webp" alt="logo" id="logo">
+  <img src="images/logo.webp" alt="logo" id="logo">
   </section>
   <section id="friends" class="content">
     <h1>This is Friends</h1>
@@ -197,10 +196,18 @@ const loading = document.getElementById("loading");
 const appUI = document.getElementById("app");
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const tg = window.Telegram?.WebApp;
+tg?.ready();
+tg?.expand();
 const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
 const userId = tgUser?.id;
 const refDoc = doc(db, "users", userId || "1234567890");
 const logo = document.getElementById("logo");
+if (!tgUser) {
+  alert("Please open this app from Telegram");
+  document.body.style.display = "none";
+  throw new Error("Not opened inside Telegram");
+}
 logo.addEventListener("click", async (e) => {
 updateDoc(refDoc, {
 coins: increment(10)
