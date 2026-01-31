@@ -3,143 +3,7 @@
 <head>
   <title>Rabbit Kombat</title>
   <script src="https://telegram.org/js/telegram-web-app.js?59"></script>
-  <link rel="stylesheet" href="style.css" class="css">
-  <style>
-* {
-  margin: 0;
-  padding: 0;
-}
-body {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  height: 100vh;
-  background: #0b0614;
-}
-#app {
-  
-  position: relative;
-}
-.el {
-  position: absolute;
-  color: #ffec07;
-  font-weight: 900;
-  font-size: 30px;
-}
-img {
-  height: 250px;
-  border-radius: 50%;
-  width: 250px;
-  transition: transform 0.15s ease;
-}
-img:active {
-  transform: scale(0.98);
-}
-@keyframes floatUp{
-  from{
-    transform: translateY(0);
-    opacity: 1;
-  }
-  to{
-    transform: translateY(-100px);
-    opacity: 0;
-  }
-}
-#loading {
-  background-image: url('images/background.webp');
-  height: 100vh;
-  width: 100vw;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  color: white;
-  text-shadow: 3px 5px 10px rgb(255,180,9);
-  font-size: 50px;
-  font-weight: 800;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-#loading p {
-  transform: translateY(20rem);
-  font-family: Sans-Serif;
-}
-#loading .bar {
-  width: 90%;
-  height: 10px;
-  background: #ffffff50;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-top: 21rem;
-}
-#loading .bar span {
-  display: block;
-  height: 100%;
-  width: 0;
-  background: linear-gradient(90deg, #ffec07, #ffb409);
-  animation: load 3s ease infinite;
-  border-radius: 10px;
-}
-#loading h1 {
-  margin: 0;
-  padding: 0;
-  font-size: 50px;
-  transform: translateY(-150px);
-  text-shadow: none;
-}
-@keyframes load {
-  from{
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-.tabs-container {
-  position: fixed;
-  bottom: 0;
-  width: 100vw;
-  display: flex;
-  justify-content: space-between;
-  background: rgb(46,51,81);
-  left: 0;
-  right: 0;
-  border-top: 2px solid rgb(42,93,182);
-  padding: 10px 0 10px 0;
-}
-
-.tab {
-  background: none;
-  border: none;
-  opacity: 0.4;
-  flex: 1;
-}
-
-.tab img {
-  height: 40px;
-  width: auto;
-  border-radius: 0;
-}
-
-.tab.active {
-  opacity: 1;
-  transform: scale(1.1);
-  display: block;
-}
-.content {
-  display: none;
-}
-.content.active {
-  display: block;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.tab-content{
-  color: white;
-}
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="loading"><h1>Rabbit Kombat</h1><p>loading...</p><div class="bar"><span></span></div></div>
@@ -179,186 +43,40 @@ img:active {
 </section>
   <section id="leaderboard" class="content">
   <h1 style="margin-bottom: 20px;">Top Rabbits</h1>
-  <div id="leaderboard-list" style="width: 90%; max-height: 60vh; overflow-y: auto;">
+  <div id="leaderboard-list">
     <p style="text-align: center;">Loading rankings...</p>
   </div>
 </section>
   <section id="earn" class="content">
   <h1>Tasks</h1>
-  <p style="color: #aaa; margin-bottom: 20px;">Complete tasks to earn big rewards!</p>
+  <p id="complete">Complete tasks to earn big rewards!</p>
   
-  <div id="tasks-list" style="width: 90%;">
-    <div class="task-card" style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; margin-bottom: 10px;">
+  <div id="tasks-list">
+    <div class="task-card">
       <div>
-        <p style="font-weight: bold;">Join Channel</p>
-        <p style="color: #ffec07; font-size: 14px;">+10,000 🥕</p>
+        <p class="task-p">Join Telegram Channel</p>
+        <p class="reward">+10,000 🥕</p>
       </div>
-      <button onclick="handleTask('join_channel', 10000, 'https://t.me/your_channel')" id="btn-join_channel" style="background: #ffec07; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold;">Go</button>
+      <button onclick="handleTask('join_channel', 10000, 'https://t.me/RabbitKombatOfficial')" id="btn-join_channel" style="background: #ffec07; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold;">Go</button>
+    </div>
+    <div class="task-card">
+      <div>
+        <p class="task-p">Join our Youtube Channel</p>
+        <p class="reward">+10,000🥕</p>
+      </div>
+      <button onclick="handleTask('join_youtube', 10000, 'https://youtube.com/@balnix01?si=NhyMTGLoP_AZpquy')" id="btn-join_youtube" style="background: #ffec07; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold;">Go</button>
+    </div>
+    <div class="task-card">
+      <div>
+        <p class="task-p">Follow us on Instagram</p>
+        <p class="reward">+10,000 🥕</p>
+      </div>
+      <button onclick="handleTask('follow_instagram', 10000, 'https://www.instagram.com/ofc_ayub_20?igsh=MTF2Mjk2ODNiZTJnOA==')" id="btn-follow-instagram" style="background: #ffec07; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold;">Go</button>
     </div>
   </div>
 </section>
 </div>
 </div>
-<script type="module">
-import { initializeApp} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-import { arrayUnion, getFirestore, doc, setDoc, getDoc, updateDoc, increment, onSnapshot, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDxLT9y-1YFG6LLRBcePEmMcTFvq2NiZ4A",
-  authDomain: "rabbit-kombat-56122.firebaseapp.com",
-  projectId: "rabbit-kombat-56122",
-  storageBucket: "rabbit-kombat-56122.firebasestorage.app",
-  messagingSenderId: "744320568726",
-  appId: "1:744320568726:web:acfb93b1e16e68b56921b7"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const tg = window.Telegram?.WebApp;
-tg?.ready();
-tg?.expand();
-
-const tgUser = tg?.initDataUnsafe?.user;
-const userId = tgUser?.id ? String(tgUser.id) : "1234567890";
-const refDoc = doc(db, "users", userId);
-
-const loading = document.getElementById("loading");
-const appUI = document.getElementById("app");
-const pointsDisplay = document.getElementById("points");
-
-if (!tgUser && userId === "1234567890") {
-    alert("Please open this app from Telegram");
-}
-
-window.handleTask = async function(taskId, reward, link) {
-    const userDoc = await getDoc(refDoc);
-    const userData = userDoc.data();
-    
-    // Check if already completed
-    if (userData.completedTasks && userData.completedTasks.includes(taskId)) {
-        tg.showAlert("Task already completed!");
-        return;
-    }
-
-    // Open Link
-    tg.openTelegramLink(link);
-
-    // Reward after a small delay (Simulating verification)
-    setTimeout(async () => {
-        try {
-            await updateDoc(refDoc, {
-                coins: increment(reward),
-                completedTasks: arrayUnion(taskId) // Iske liye arrayUnion import karna hoga
-            });
-            tg.showAlert(`Success! You earned ${reward} coins.`);
-            document.getElementById(`btn-${taskId}`).innerText = "✅";
-            document.getElementById(`btn-${taskId}`).disabled = true;
-        } catch (e) {
-            console.error("Task error:", e);
-        }
-    }, 20000);
-};
-
-// --- 1. INITIALIZATION & REFERRAL LOGIC ---
-async function startApp() {
-    const userSnap = await getDoc(refDoc);
-    const startParam = tg?.initDataUnsafe?.start_param;
-
-    if (!userSnap.exists()) {
-        // Naya User hai - Check Referral
-        if (startParam && startParam !== userId) {
-            const referrerRef = doc(db, "users", startParam);
-            try {
-                await updateDoc(referrerRef, { coins: increment(5000) });
-                console.log("Referrer rewarded!");
-            } catch (e) { console.log("Referrer not found"); }
-        }
-        // Create New User
-        await setDoc(refDoc, {
-            userName: tgUser?.username || "Player",
-            name: (tgUser?.first_name || "Dev") + " " + (tgUser?.last_name || ""),
-            coins: 0,
-            isPremium: tgUser?.is_premium || false
-        });
-    }
-
-    // --- 2. START LISTENERS (Data load hone ke baad) ---
-    setupGame();
-}
-
-function setupGame() {
-    // Real-time Score Sync
-    let isAppReady = false;
-    onSnapshot(refDoc, (snap) => {
-        if (!snap.exists()) return;
-        pointsDisplay.innerText = snap.data().coins || 0;
-        if (!isAppReady) {
-            loading.style.display = "none";
-            appUI.style.display = "block";
-            isAppReady = true;
-        }
-    });
-
-    // Click Logic
-    document.getElementById("logo").addEventListener("click", (e) => {
-        updateDoc(refDoc, { coins: increment(10) });
-        showFloatingText(e);
-    });
-
-    // Referral Link
-    const botUsername = "Rabbitkombatofc_bot";
-    const inviteLink = `https://t.me/${botUsername}?start=${userId}`;
-    document.getElementById("referral-link").value = inviteLink;
-}
-
-// --- HELPERS ---
-function showFloatingText(e) {
-    const el = document.createElement("p");
-    el.className = "el";
-    el.innerText = "+10";
-    el.style.top = e.clientY + "px";
-    el.style.left = e.clientX + "px";
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(), 2000);
-}
-
-// Tabs Logic
-const tabs = document.querySelectorAll(".tab");
-const contents = document.querySelectorAll(".content");
-tabs.forEach(tab => {
-    tab.addEventListener("click", () => {
-        const target = tab.dataset.tab;
-        tabs.forEach(t => t.classList.remove("active"));
-        contents.forEach(c => c.classList.remove("active"));
-        tab.classList.add("active");
-        document.getElementById(target).classList.add("active");
-        if (target === "leaderboard") updateLeaderboard();
-    });
-});
-
-async function updateLeaderboard() {
-    const list = document.getElementById("leaderboard-list");
-    const q = query(collection(db, "users"), orderBy("coins", "desc"), limit(10));
-    const snap = await getDocs(q);
-    list.innerHTML = "";
-    let rank = 1;
-    snap.forEach(doc => {
-        const u = doc.data();
-        list.innerHTML += `<div style="display:flex; justify-content:space-between; padding:10px; background:rgba(255,255,255,0.1); margin:5px; border-radius:8px;">
-            <span>#${rank} ${u.userName || "Player"}</span>
-            <span style="color:#ffec07;">${u.coins} 🥕</span>
-        </div>`;
-        rank++;
-    });
-}
-
-document.getElementById("copy-btn").addEventListener("click", () => {
-    const link = document.getElementById("referral-link").value;
-    navigator.clipboard.writeText(link);
-    tg.showAlert("Link Copied!");
-});
-
-startApp();
-</script>
+<script type="module" src="script.js"></script>
 </body>
 </html>
