@@ -1,0 +1,77 @@
+.app {
+  min-height: 100vh;
+  background: #000; /* Dark background for premium look */
+  color: #fff;
+  padding-bottom: 100px;
+}
+
+.content {
+  padding: 20px;
+  text-align: center;
+}
+
+/* Premium Bottom Navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 20px;
+  left: 15px;
+  right: 15px;
+  display: flex;
+  height: 70px;
+  background: rgba(28, 28, 30, 0.8); /* Dark glass */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 500px;
+  padding: 0 8px;
+  z-index: 1000;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  box-shadow:
+  0 0 3px rgba(42, 171, 238, 0.4),
+  0 0 3px rgba(42, 171, 238, 0.2);
+}
+
+.bottom-nav button {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.2s ease;
+}
+
+.bottom-nav button:active {
+  transform: scale(0.9);
+}
+
+.bottom-nav img {
+  width: 50px;
+  height: 50px;
+  transition: all 0.3s ease;
+  filter: brightness(0.5) grayscale(1);
+}
+
+.bottom-nav button.active img {
+  filter: brightness(1) grayscale(0);
+  transform: translateY(-2px);
+}
+
+/* Sliding Pill Indicator */
+.nav-indicator {
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 8px;
+  width: calc((100% - 16px) / 5); /* 5 tabs */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border-radius: 54px;
+  z-index: 1;
+  transition: transform 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
