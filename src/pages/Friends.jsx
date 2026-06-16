@@ -58,7 +58,7 @@ function Friends({ data }) {
         
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
           <button onClick={handleCopy} style={buttonStyle('#333')}>Copy Link</button>
-          <button onClick={handleShare} style={buttonStyle('#0088cc')}>Share</button>
+          <button onClick={handleShare} style={buttonStyle('#e9e600')}>Share</button>
         </div>
       </div>
 
@@ -71,8 +71,8 @@ function Friends({ data }) {
             <div key={friend.id} style={{ 
               display: 'flex', 
               justifyContent: 'space-between',
-              padding: '12px 15px',
-              background: 'rgba(255, 255, 255, 0.03)',
+              padding: '15px 15px',
+              background: '#606060',
               borderRadius: '10px',
               marginBottom: '8px'
             }}>
