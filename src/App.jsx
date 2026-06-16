@@ -39,7 +39,6 @@ function App() {
             return;
           }
 
-          // POST to backend with initData and start_param
           const response = await api.post('/auth/telegram', { 
             initData, 
             start_param: startParam 
@@ -49,7 +48,6 @@ function App() {
             localStorage.setItem('jwt_token', response.token);
             setUser(response.user);
 
-            // Fetch referral data ONCE right after login
             const refResponse = await api.get('/referrals/me');
             if (refResponse.success) {
               setReferralData(refResponse);
@@ -73,14 +71,7 @@ function App() {
 
   if (isAuthLoading) {
     return (
-      <div className="loading-screen" style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh', 
-        color: '#fff',
-        background: '#000'
-      }}>
+      <div className="loading-screen">
         <div className="loader">Authenticating...</div>
       </div>
     );
@@ -88,18 +79,8 @@ function App() {
 
   if (authError) {
     return (
-      <div className="auth-error-screen" style={{ 
-        display: 'flex', 
-        flexDirection: 'column',
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh', 
-        color: '#ff4d4d',
-        background: '#000',
-        textAlign: 'center',
-        padding: '20px'
-      }}>
-        <h2 style={{ marginBottom: '10px' }}>⚠️ Access Denied</h2>
+      <div className="auth-error-screen">
+        <h2 className="auth-error-title">⚠️ Access Denied</h2>
         <p>{authError}</p>
       </div>
     );
@@ -107,7 +88,7 @@ function App() {
 
   const renderPage = () => {
     switch (page) {
-      case 'home': return <Home />;
+      case 'home': return <Home data={referralData} />;
       case 'earn': return <Earn />;
       case 'mining': return <Mining />;
       case 'friends': return <Friends data={referralData} />;
@@ -128,7 +109,7 @@ function App() {
 
   return (
     <div className="app">
-      <header style={{ padding: '20px', textAlign: 'center' }}>
+      <header className="app-header">
         <h1>{user ? `Welcome, ${user.first_name}` : 'Demo Mode'}</h1>
       </header>
 
@@ -137,10 +118,7 @@ function App() {
       </div>
 
       <div className="bottom-nav">
-        <div 
-          className="nav-indicator" 
-          style={{ transform: `translateX(${activeIndex * 100}%)` }}
-        />
+        <div className={`nav-indicator pos-${activeIndex}`} />
 
         {tabs.map((tab) => (
           <button

@@ -10,6 +10,37 @@
   text-align: center;
 }
 
+/* Auth & Loading Screens */
+.loading-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #fff;
+  background: #000;
+}
+
+.auth-error-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #ff4d4d;
+  background: #000;
+  text-align: center;
+  padding: 20px;
+}
+
+.auth-error-title {
+  margin-bottom: 10px;
+}
+
+.app-header {
+  padding: 20px;
+  text-align: center;
+}
+
 /* Premium Bottom Navigation */
 .bottom-nav {
   position: fixed;
@@ -27,9 +58,6 @@
   z-index: 1000;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   overflow: hidden;
-  box-shadow:
-  0 0 3px rgba(42, 171, 238, 0.4),
-  0 0 3px rgba(42, 171, 238, 0.2);
 }
 
 .bottom-nav button {
@@ -72,6 +100,133 @@
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
   border-radius: 54px;
   z-index: 1;
-  transition: transform 0.2s ease;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.nav-indicator.pos-0 { transform: translateX(0%); }
+.nav-indicator.pos-1 { transform: translateX(100%); }
+.nav-indicator.pos-2 { transform: translateX(200%); }
+.nav-indicator.pos-3 { transform: translateX(300%); }
+.nav-indicator.pos-4 { transform: translateX(400%); }
+
+/* Home Page Styles */
+.home-page {
+  padding: 20px;
+  color: #fff;
+}
+
+.points-container {
+  margin-top: 20px;
+  opacity: 0.8;
+}
+
+.points-value {
+  color: #ffcc00;
+  font-weight: bold;
+}
+
+/* Friends Page Styles */
+.friends-page {
+  padding: 20px;
+  color: #fff;
+}
+
+.friends-title {
+  margin-bottom: 20px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.stats-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.stats-value {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.stats-value.highlight {
+  color: #ffcc00;
+}
+
+.stats-label {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.referral-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 25px;
+}
+
+.referral-link-title {
+  margin: 0 0 10px 0;
+}
+
+.referral-link-box {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  word-break: break-all;
+  margin-bottom: 15px;
+  color: #0088cc;
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.btn-base {
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-copy {
+  background: #333;
+}
+
+.btn-share {
+  background: #2925ff;
+}
+
+.friend-list-title {
+  margin-bottom: 15px;
+}
+
+.friend-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.reward-text {
+  color: #ffcc00;
+}
+
+.empty-friends {
+  opacity: 0.5;
+  text-align: center;
+  margin-top: 20px;
 }
