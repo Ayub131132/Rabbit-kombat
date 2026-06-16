@@ -18,6 +18,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [page, setPage] = useState('home');
   const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [authError, setAuthError] = useState(null);
 
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
@@ -25,28 +26,32 @@ function App() {
     if (tg) {
       tg.ready();
       tg.expand();
+const authenticate = async () => {
+  try {
+    const initData = tg.initData;
+    const startParam = tg.initDataUnsafe?.start_param;
 
-      const authenticate = async () => {
-        try {
-          const initData = tg.initData;
+    if (!initData) {
+      console.warn('Demo Mode: No Telegram initData found');
+      setIsAuthLoading(false);
+      return;
+    }
 
-          if (!initData) {
-            console.warn('Demo Mode: No Telegram initData found');
-            setIsAuthLoading(false);
-            return;
-          }
+    // POST to backend with initData and start_param
+    const response = await api.post('/auth/telegram', { 
+      initData, 
+      start_param: startParam 
+    });
 
-          // POST to backend for verification and JWT
-          const response = await api.post('/auth/telegram', { initData });
 
           if (response.success) {
             localStorage.setItem('jwt_token', response.token);
             setUser(response.user);
           } else {
-            console.error('Authentication failed:', response.error);
+            setAuthError('Authentication failed. Access denied.');
           }
         } catch (err) {
-          console.error('Connection error to backend:', err);
+          setAuthError('Unable to connect to security server.');
         } finally {
           setIsAuthLoading(false);
         }
@@ -69,6 +74,25 @@ function App() {
         background: '#000'
       }}>
         <div className="loader">Authenticating...</div>
+      </div>
+    );
+  }
+
+  if (authError) {
+    return (
+      <div className="auth-error-screen" style={{ 
+        display: 'flex', 
+        flexDirection: 'column',
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh', 
+        color: '#ff4d4d',
+        background: '#000',
+        textAlign: 'center',
+        padding: '20px'
+      }}>
+        <h2 style={{ marginBottom: '10px' }}>⚠️ Access Denied</h2>
+        <p>{authError}</p>
       </div>
     );
   }
