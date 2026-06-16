@@ -1,40 +1,22 @@
-import { useState, useEffect } from 'react';
-import { api } from '../services/api';
-
-function Friends() {
-  const [data, setData] = useState({
+function Friends({ data }) {
+  // Use data from props, fallback to empty defaults if still loading
+  const referralData = data || {
     referralLink: '',
     referralCount: 0,
     referralRewards: 0,
     friends: []
-  });
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchFriends = async () => {
-      try {
-        const response = await api.get('/referrals/me');
-        if (response.success) {
-          setData(response);
-        }
-      } catch (err) {
-        console.error('Error fetching friends:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFriends();
-  }, []);
+  };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(data.referralLink);
+    if (!referralData.referralLink) return;
+    navigator.clipboard.writeText(referralData.referralLink);
     alert('Referral link copied!');
   };
 
   const handleShare = () => {
+    if (!referralData.referralLink) return;
     const text = "Join me on Rabbit Kombat!";
-    const url = `https://t.me/share/url?url=${encodeURIComponent(data.referralLink)}&text=${encodeURIComponent(text)}`;
+    const url = `https://t.me/share/url?url=${encodeURIComponent(referralData.referralLink)}&text=${encodeURIComponent(text)}`;
     window.open(url, '_blank');
   };
 
@@ -50,11 +32,11 @@ function Friends() {
         marginBottom: '20px' 
       }}>
         <div style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '15px', borderRadius: '12px', textAlign: 'center' }}>
-          <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{data.referralCount}</div>
+          <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{referralData.referralCount}</div>
           <div style={{ fontSize: '12px', opacity: 0.6 }}>Total Friends</div>
         </div>
         <div style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '15px', borderRadius: '12px', textAlign: 'center' }}>
-          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#ffcc00' }}>{data.referralRewards}</div>
+          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#ffcc00' }}>{referralData.referralRewards}</div>
           <div style={{ fontSize: '12px', opacity: 0.6 }}>Rewards Earned</div>
         </div>
       </div>
@@ -71,7 +53,7 @@ function Friends() {
           marginBottom: '15px',
           color: '#0088cc'
         }}>
-          {loading ? 'Generating...' : data.referralLink}
+          {referralData.referralLink || 'Generating...'}
         </div>
         
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
@@ -82,10 +64,10 @@ function Friends() {
 
       <h3 style={{ marginBottom: '15px' }}>Referred Friends</h3>
       <div className="friend-list">
-        {loading ? (
-          <p>Loading...</p>
-        ) : data.friends.length > 0 ? (
-          data.friends.map(friend => (
+        {!data ? (
+          <p>Loading friends...</p>
+        ) : referralData.friends.length > 0 ? (
+          referralData.friends.map(friend => (
             <div key={friend.id} style={{ 
               display: 'flex', 
               justifyContent: 'space-between',

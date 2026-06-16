@@ -19,6 +19,7 @@ function App() {
   const [page, setPage] = useState('home');
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [authError, setAuthError] = useState(null);
+  const [referralData, setReferralData] = useState(null);
 
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
@@ -26,31 +27,38 @@ function App() {
     if (tg) {
       tg.ready();
       tg.expand();
-const authenticate = async () => {
-  try {
-    const initData = tg.initData;
-    const startParam = tg.initDataUnsafe?.start_param;
 
-    if (!initData) {
-      console.warn('Demo Mode: No Telegram initData found');
-      setIsAuthLoading(false);
-      return;
-    }
+      const authenticate = async () => {
+        try {
+          const initData = tg.initData;
+          const startParam = tg.initDataUnsafe?.start_param;
 
-    // POST to backend with initData and start_param
-    const response = await api.post('/auth/telegram', { 
-      initData, 
-      start_param: startParam 
-    });
+          if (!initData) {
+            console.warn('Demo Mode: No Telegram initData found');
+            setIsAuthLoading(false);
+            return;
+          }
 
+          // POST to backend with initData and start_param
+          const response = await api.post('/auth/telegram', { 
+            initData, 
+            start_param: startParam 
+          });
 
           if (response.success) {
             localStorage.setItem('jwt_token', response.token);
             setUser(response.user);
+
+            // Fetch referral data ONCE right after login
+            const refResponse = await api.get('/referrals/me');
+            if (refResponse.success) {
+              setReferralData(refResponse);
+            }
           } else {
             setAuthError('Authentication failed. Access denied.');
           }
         } catch (err) {
+          console.error('Auth Error:', err);
           setAuthError('Unable to connect to security server.');
         } finally {
           setIsAuthLoading(false);
@@ -102,7 +110,7 @@ const authenticate = async () => {
       case 'home': return <Home />;
       case 'earn': return <Earn />;
       case 'mining': return <Mining />;
-      case 'friends': return <Friends />;
+      case 'friends': return <Friends data={referralData} />;
       case 'leaderboard': return <Leaderboard />;
       default: return null;
     }
